@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Solver</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="card">
+    <header class="card-header">
+      <div class="header-right">
+        <div class="status">Page scanned</div>
+        <button class="btn-gear" id="openSettingsBtn" aria-label="Settings" title="Settings">⚙</button>
+      </div>
+    </header>
+
+    <section class="settings-panel" id="settingsPanel" hidden>
+      <div class="panel-title">Gemini API key</div>
+      <input type="password" class="text-input" id="apiKeyInput" placeholder="AIza…" autocomplete="off" spellcheck="false" />
+      <div class="panel-actions">
+        <button class="btn btn-dark" id="saveSettingsBtn">Save</button>
+        <button class="btn btn-ghost" id="closeSettingsBtn">Cancel</button>
+      </div>
+      <div class="settings-hint" id="settingsHint"></div>
+    </section>
+
+    <section class="question">
+      <div class="small-label">Question on screen</div>
+      <div class="question-text" id="questionText">
+        Which planet in our solar system has the most moons?
+      </div>
+    </section>
+
+    <section class="answer">
+      <div class="small-label">Answer</div>
+      <div class="answer-text" id="answerText">Saturn</div>
+    </section>
+
+    <section class="report-panel" id="reportPanel" hidden>
+      <div class="panel-title">What's the correct answer?</div>
+      <textarea class="text-input text-area" id="correctAnswerInput" placeholder="Type the correct answer. It'll be cached for next time." rows="3"></textarea>
+      <div class="panel-actions">
+        <button class="btn btn-dark" id="sendReportBtn">Save correction</button>
+        <button class="btn btn-ghost" id="cancelReportBtn">Cancel</button>
+      </div>
+      <div class="settings-hint" id="reportHint"></div>
+    </section>
+
+    <section class="thanks-screen" id="thanksBanner" hidden>
+      <svg class="thanks-star" viewBox="0 0 24 24" fill="#6F5DB3" aria-hidden="true">
+        <path d="M12 2l2.9 6.9L22 10l-5.5 4.8L18.2 22 12 18.3 5.8 22l1.7-7.2L2 10l7.1-1.1L12 2z"/>
+      </svg>
+      <div class="thanks-word">Thanks</div>
+    </section>
+
+    <footer class="card-footer" id="defaultFooter">
+      <span class="footer-muted">Not right?</span>
+      <button class="btn-report" id="openReportBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4M4 4h13l-2 4 2 4H4"></path></svg>
+        Report wrong answer
+      </button>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
