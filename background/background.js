@@ -1,4 +1,7 @@
 const GEMINI_MODEL = "gemini-3.8-flash";
+// shortcut: single fallback on free-tier overload (3.8 flash: 20 req/day).
+// 3.1-flash-lite has 500/day. Upgrade to a model list if we need more tiers.
+const GEMINI_FALLBACK_MODEL = "gemini-3.1-flash-lite";
 const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/interactions";
 
 const MAX_CORRECTIONS_PER_TYPE = 30;
@@ -106,17 +109,22 @@ async function handleSolveStreaming(payload, port, signal) {
     : "";
   const fullPrompt = `${COURSE_CONTEXT}\n\n${system}${exampleBlock}\n\n${JSON.stringify(payload)}`;
 
-  const response = await fetch(GEMINI_URL, {
+  const callModel = (model) => fetch(GEMINI_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json", "x-goog-api-key": geminiApiKey },
     body: JSON.stringify({
-      model: GEMINI_MODEL,
+      model,
       input: fullPrompt,
       stream: true,
       generation_config: { temperature: 0, max_output_tokens: 256 },
     }),
     signal,
   });
+
+  let response = await callModel(GEMINI_MODEL);
+  if (!response.ok && (response.status === 429 || response.status === 503)) {
+    response = await callModel(GEMINI_FALLBACK_MODEL);
+  }
 
   if (!response.ok) {
     const err = await response.json().catch(() => ({}));
